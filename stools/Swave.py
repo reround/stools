@@ -13,26 +13,15 @@ def sine(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成正弦波
 
-    Parameters
-    ----------
-    freq : float, optional
-        频率 (单位: Hz), by default 10
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，正弦波形
+    :param float freq: 频率 (单位: Hz), defaults to 10,
+    :param float time: 时间长度 (单位: s), defaults to 1,
+    :param int fs: 采样率(单位: Hz), defaults to 1000,
+    :param float amp: 振幅 (单位: V), defaults to 1.0,
+    :param np.ndarray t: 时间序列, defaults to 1.0,
+    :return tuple: (时间序列，正弦波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -46,26 +35,15 @@ def cosine(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成余弦波
 
-    Parameters
-    ----------
-    freq : float, optional
-        频率 (单位: Hz), by default 10
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，余弦波形)
+    :param float freq: 频率 (单位: Hz), defaults to 10,
+    :param float time: 时间长度 (单位: s), defaults to 1,
+    :param int fs: 采样率(单位: Hz), defaults to 1000,
+    :param float amp: 振幅 (单位: V), defaults to 1.0,
+    :param np.ndarray t: 时间序列, defaults to 1.0,
+    :return tuple: (时间序列，余弦波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -79,26 +57,15 @@ def square(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成方波
 
-    Parameters
-    ----------
-    freq : float, optional
-        频率 (单位: Hz), by default 10
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，方波形)
+    :param float freq: 频率 (单位: Hz), defaults to 10,
+    :param float time: 时间长度 (单位: s), defaults to 1,
+    :param int fs: 采样率(单位: Hz), defaults to 1000,
+    :param float amp: 振幅 (单位: V), defaults to 1.0,
+    :param np.ndarray t: 时间序列, defaults to 1.0,
+    :return tuple: (时间序列，方波波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -112,26 +79,15 @@ def triangle(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成三角波
 
-    Parameters
-    ----------
-    freq : float, optional
-        频率 (单位: Hz), by default 10
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，三角波形)
+    :param float freq: 频率 (单位: Hz), defaults to 10,
+    :param float time: 时间长度 (单位: s), defaults to 1,
+    :param int fs: 采样率(单位: Hz), defaults to 1000,
+    :param float amp: 振幅 (单位: V), defaults to 1.0,
+    :param np.ndarray t: 时间序列, defaults to 1.0,
+    :return tuple: (时间序列，三角波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -148,26 +104,15 @@ def sawtooth(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成锯齿波
 
-    Parameters
-    ----------
-    freq : float, optional
-        频率 (单位: Hz), by default 10
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，锯齿波形)
+    :param float freq: 频率 (单位: Hz), defaults to 10,
+    :param float time: 时间长度 (单位: s), defaults to 1,
+    :param int fs: 采样率(单位: Hz), defaults to 1000,
+    :param float amp: 振幅 (单位: V), defaults to 1.0,
+    :param np.ndarray t: 时间序列, defaults to 1.0,
+    :return tuple: (时间序列，锯齿波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -184,28 +129,16 @@ def chirp(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
-    """生成线性振荡
+) -> tuple:
+    """生成线性调频波
 
-    Parameters
-    ----------
-    start_freq : float, optional
-        起始频率 (单位: Hz), by default 10
-    end_freq : float, optional
-        终止频率 (单位: Hz), by default 100
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，线性振荡)
+    :param float start_freq: 起始频率 (单位: Hz), defaults to 10
+    :param float end_freq: 终止频率 (单位: Hz), defaults to 100
+    :param float time: 时间长度 (单位: s), defaults to 1
+    :param int fs: 采样率 (单位: Hz), defaults to 1000
+    :param float amp: 振幅 (单位: V), defaults to 1.0
+    :param np.ndarray t: 时间序列, defaults to None
+    :return tuple: (时间序列，线性调频波形)
     """
     if t is None:
         t = np.arange(0, time, 1 / fs)
@@ -218,25 +151,16 @@ def noise(
     fs: int = 1000,
     amp: float = 1.0,
     t: np.ndarray = None,
-) -> (np.ndarray, np.ndarray):
+) -> tuple:
     """生成随机噪声
 
-    Parameters
-    ----------
-    time : float, optional
-        时间长度 (单位: s), by default 1
-    fs : int, optional
-        采样率 (单位: Hz), by default 1000
-    amp : float, optional
-        振幅 (单位: V), by default 1.0
-    t : np.ndarray, optional
-        时间序列, by default None
-
-    Returns
-    -------
-    (np.ndarray, np.ndarray)
-        (时间序列，随机噪声)
+    :param float time: 时间长度 (单位: s), defaults to 1
+    :param int fs: 采样率 (单位: Hz), defaults to 1000
+    :param float amp: 振幅 (单位: V), defaults to 1.0
+    :param np.ndarray t: 时间序列, defaults to None
+    :return tuple: (时间序列，随机噪声)
     """
+
     if t is None:
         t = np.arange(0, time, 1 / fs)
     s = amp * np.random.randn(len(t))

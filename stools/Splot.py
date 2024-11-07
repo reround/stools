@@ -20,21 +20,16 @@ matplotlib.rcParams["font.size"] = 14.5  # 设置字体大小为 14.5
 def set_font_family(family: str):
     """设置字体
 
-    Parameters
-    ----------
-    family : str
-        字体名
+    :param str family: 字体名
     """
+
     matplotlib.rcParams["font.family"] = [family]
 
 
 def set_label_font_size(size: float):
     """设置标签字体大小
 
-    Parameters
-    ----------
-    size : float
-        字体大小
+    :param float size: 字体大小
     """
     matplotlib.rcParams["font.size"] = size
 

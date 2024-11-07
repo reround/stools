@@ -1,7 +1,5 @@
 """
-
 一些信号处理的工具函数
-
 """
 
 import numpy as np
@@ -13,19 +11,10 @@ from scipy.signal import stft
 def smooth(x: np.ndarray, M: int) -> np.ndarray:
     """平滑函数
 
-    Parameters
-    ----------
-    x : np.ndarray
-        需要平滑的数组
-    M : int
-        平滑点数
-
-    Returns
-    -------
-    np.ndarray
-        平滑后的数组
+    :param np.ndarray x: 需要平滑的数组
+    :param int M: 平滑点数
+    :return np.ndarray: 平滑后的数组
     """
-
     K = round(M / 2 - 0.1)  # M应为奇数，如果是偶数，则取大1的奇数
     lenX = len(x)
     if lenX < 2 * K + 1:
@@ -42,19 +31,14 @@ def smooth(x: np.ndarray, M: int) -> np.ndarray:
 
 
 def abs_roc(sig: np.ndarray) -> np.ndarray:
-    """使信号按的变化率（"rate of change"）的绝对值变\n
+    """
+    使信号按的变化率（"rate of change"）的绝对值变\n
     对信号求 dy -> 对 dy 取绝对值 -> 累加 abs(dy)
 
-    Parameters
-    ----------
-    sig : np.ndarray
-        信号序列
-
-    Returns
-    -------
-    np.ndarray
-        按变化率绝对值变化的信号
+    :param np.ndarray sig: 信号序列
+    :return np.ndarray: 按变化率绝对值变化的信号
     """
+
     ds = []  # 变化率序列
     for i in range(1, len(t)):
         ds.append((sig[i] - sig[i - 1]))
@@ -75,22 +59,13 @@ def compare_sig_peaks(
 ):
     """绘图对比两个信号的峰值
 
-    Parameters
-    ----------
-    sig1 : np.ndarray
-        信号1
-    sig2 : np.ndarray
-        信号2
-    x : np.ndarray
-        共同的时间序列, by default None
-    start : int, optional
-        开始位置, by default 0
-    end : int, optional
-        结束位置, by default None
-    ylim : tuple, optional
-        y轴范围, by default None
-    xlim : tuple, optional
-        x轴范围, by default None
+    :param np.ndarray sig1: 信号1
+    :param np.ndarray sig2: 信号2
+    :param np.ndarray x: 共同的时间序列, defaults to None
+    :param int start: 开始位置, defaults to 0
+    :param int end: 结束位置, defaults to None
+    :param int ylim: 结束位置, y轴范围 to None
+    :param int xlim: 结束位置, x轴范围 to None
     """
     if x is None:
         x = np.arange(len(sig1))
@@ -143,14 +118,9 @@ def compare_sig_peaks(
 def pectrum(signal: np.ndarray, sample_interval: int, isdB: bool = False):
     """绘制 signal 的傅里叶变换频谱图
 
-    Parameters
-    ----------
-    signal : np.ndarray
-        信号序列
-    sample_interval : int
-        采样间隔 ( 1/fs)
-    isdB : bool, optional
-        dB 显示, by default False
+    :param np.ndarray signal: 信号序列
+    :param int sample_interval: 采样间隔 ( 1/fs)
+    :param bool isdB: dB 显示, defaults to False
     """
     length = len(signal)
     if isdB:
@@ -183,32 +153,18 @@ def pspectrum(
 ):
     """绘制短时傅里叶变换图
 
-    Parameters
-    ----------
-    x : np.ndarray
-        信号
-    fs : float
-        采样率
-    window : str, optional
-        窗型, by default "hamming"
-    nperseg : int, optional
-        窗长, by default 256
-    noverlap : int, optional
-        重叠样本数, by default 128
-    figsize : tuple, optional
-        画布尺寸, by default (10, 6)
-    shading : str, optional
-        颜色的填充方式, by default "gouraud"
-    title : str, optional
-        标题, by default "STFT Magnitude"
-    ylabel : str, optional
-        纵轴标签, by default "Frequency [Hz]"
-    xlabel : str, optional
-        横轴标签, by default "Time [sec]"
-    label_fontsize : str, optional
-        坐标轴字体尺寸, by default 17
-    tick_fontsize : str, optional
-        刻度字体尺寸, by default 16
+    :param np.ndarray x: 信号
+    :param float fs: 采样率
+    :param str window: 窗型, defaults to "hamming"
+    :param int nperseg: 窗长, defaults to 256
+    :param int noverlap: 重叠样本数, defaults to 128
+    :param tuple figsize: 画布尺寸, defaults to (10, 6)
+    :param str shading: 颜色的填充方式, defaults to "gouraud"
+    :param str title: 标题, defaults to "STFT Magnitude"
+    :param str ylabel: 纵轴标签, defaults to "STFT Magnitude"
+    :param str xlabel: 横轴标签, defaults to "STFT Magnitude"
+    :param str label_fontsize: 坐标轴字体尺寸, defaults to "STFT Magnitude"
+    :param str tick_fontsize: 刻度字体尺寸, defaults to "STFT Magnitude"
     """
     ylabel = kwargs.get("ylabel", "Frequency [Hz]")
     xlabel = kwargs.get("xlabel", "Time [sec]")
@@ -230,6 +186,36 @@ def pspectrum(
         axis="both", which="minor", labelsize=tick_fontsize
     )  # 设置minor ticks的字体大小
     plt.show()
+
+
+def acquire_time(fs: float, length: int) -> float:
+    """计算信号的时长
+
+    :param float fs: 信号的采样率
+    :param int length: 信号长度
+    :return float: 信号时长
+    """
+    return length / fs
+
+
+def acquire_fs(time: float, length: int) -> float:
+    """计算信号的采样率
+
+    :param float time: 信号时长
+    :param int length: 信号长度
+    :return float: 信号采样率
+    """
+    return length / time
+
+
+def acquire_len(time: float, fs: float) -> int:
+    """计算信号长度
+
+    :param float time: 信号时长
+    :param float fs: 信号采样率
+    :return int: 信号长度
+    """
+    return int(time * fs)
 
 
 if __name__ == "__main__":
