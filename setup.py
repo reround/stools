@@ -4,7 +4,7 @@ setup(
     # 包的名称
     name="stools",
     # 包的版本
-    version="0.1.3",
+    version="0.1.4",
     # 包的描述
     description="A short description of your package",
     # 长描述可以是从另一个文件中读取的

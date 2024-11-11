@@ -1,7 +1,5 @@
 """
-
-TODO: 包含一些常用的波形
-
+包含一些常用的波形
 """
 
 import numpy as np
