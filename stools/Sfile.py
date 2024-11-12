@@ -55,12 +55,13 @@ def move_file_list_to_dir(dir_path: str, file_list: list):
         print(f"move file: {f} to dir: {dir_path}")
 
 
-def loop_touch(
-    dir_path: str = "",
+def batch_touch(
+    dir_path: str = "./",
     prefix: str = "",
     suffix: str = "",
     start: int = 1,
     end: int = 10,
+    step: int = 1,
     ext: str = "txt",
 ):
     """批量创建文件
@@ -75,7 +76,7 @@ def loop_touch(
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
         print(f"create dir: {dir_path}")
-    for i in range(start, end + 1):
+    for i in range(start, end + 1, step):
         file_name = os.path.join(dir_path, prefix + f"{i:03d}" + suffix + "." + ext)
         Path(file_name).touch()
         print(f"create file: {file_name}")

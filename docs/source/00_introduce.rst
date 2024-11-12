@@ -12,3 +12,4 @@
    Swave
    Ssignal
    Simage
+   Sfile
