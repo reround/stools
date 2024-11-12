@@ -65,6 +65,7 @@ def get_file_list_with_str(
     file_list = get_file_list(dir_path)
     if start_str != "":  # 筛选起始字符串为 start_str 的文件
         file_list = [f for f in file_list if f.startswith(start_str)]
+
     if ext is not None:  # 筛选扩展名为 ext 的文件
         if not ext[0] == ".":
             ext = "." + ext
@@ -73,14 +74,13 @@ def get_file_list_with_str(
         file_list = [
             os.path.join(dir_path, f)
             for f in file_list
-            if f.split(".")[0].endswith(end_str)
+            if f[: f.rfind(".")].endswith(end_str)
         ]
     else:  # 筛选带扩展名为 ext ,以 end_str 结尾的文件
         if end_str != "":
             file_list = [
                 os.path.join(dir_path, f) for f in file_list if f.endswith(end_str)
             ]
-
     return file_list
 
 
@@ -173,7 +173,10 @@ if __name__ == "__main__":
     # print(get_dir_list("stools/assets/test"))
     # print(get_file_list_with_end_str("stools/assets/test", "dfsfa"))
     # print(get_dir_list_with_str("stools/assets/test", start_str="w", end_str=")"))
-    # print(get_file_list_with_str("stools/assets/test", start_str="sfsd"))
+    dl = get_dir_list("stools/assets")
+    print(dl)
+    for d in dl:
+        print(get_file_list("stools/assets/test"))
     # if "xxcc".startswith("xx"):
     #     print("yes")
     # else:
