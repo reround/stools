@@ -1,1 +1,1 @@
-__all__ = ["Simage", "Splot"]
+__all__ = ["Simage", "Splot", "Sfile", ""]

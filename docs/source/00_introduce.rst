@@ -11,3 +11,4 @@
    Ssound
    Swave
    Ssignal
+   Simage

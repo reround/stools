@@ -3,41 +3,51 @@ import cv2
 from PIL import Image
 
 
-def get_file_name_from_dir_by_ext(dir_path: str, ext: str = None) -> list:
+def create_solid_color_picture(output_file, width=None, height=None, color=None):
+    """生成纯色图片
+
+    :param _type_ output_file: 输出路径
+    :param _type_ width: 宽, defaults to None
+    :param _type_ height: 高, defaults to None
+    :param _type_ color: 颜色, defaults to None
+    """
+    color = (255, 0, 0, 255) if color is None else color
+    width = 100 if width is None else width
+    height = 100 if height is None else height
+    im = Image.new("RGBA", (width, height), color)
+    im.save(output_file, "PNG")
+    print(f"Create {output_file}.")
+
+
+def get_png_list(dir_path: str, ext: str = None) -> list:
     """获取目录中所有扩展名为 ext 的文件名
 
-    :param str dir_path: _description_
-    :raises ValueError: _description_
+    :param str dir_path: 目录路径
+    :param str ext: 扩展名
     :return list: _description_
     """
-    # 检查文件是否存在
+    # 检查文件夹是否存在
     if not os.path.exists(dir_path):
-        raise ValueError("dir_path is not valid")
-    # 转换成绝对路径
-    dir_path = os.path.join(os.getcwd(), dir_path)
+        os.makedirs(dir_path)
+        print(f"create dir: {dir_path}")
+    # # 转换成绝对路径
+    # dir_path = os.path.join(os.getcwd(), dir_path)
     # 获取文件夹中的所有文件名
     file_names = os.listdir(dir_path)
     # 排序
     file_names.sort()
     if ext is not None:
         # 筛选扩展名为 ext 的文件
-        file_names = [
-            os.path.join(dir_path, file) for file in file_names if file.endswith(ext)
-        ]
+        file_names = [os.path.join(dir_path, f) for f in file_names if f.endswith(ext)]
     return file_names
 
 
 def is_image_solid_black(img: Image):
     """判断图片是否黑色且完全不透明
 
-    :param Image img: 图片
+    :param PIL.Image img: 图片
     :return bool: 是否全黑
     """
-    # # 打开图片
-    # img = Image.open(png_path)
-    # # 将图片转换为RGBA模式，以确保我们处理的是RGBA值
-    # img = img.convert("RGBA")
-
     # 获取图片的尺寸
     width, height = img.size
     # 遍历图片的每个像素
@@ -55,7 +65,7 @@ def is_image_solid_black(img: Image):
 def is_image_black(img: Image):
     """判断图片是否全黑（不管透明度）
 
-    :param Image img: 图片
+    :param PIL.Image img: 图片
     :return bool: 是否全黑
     """
 
@@ -78,9 +88,11 @@ def del_end_black_frame(png_list: list):
 
     :param list png_list: PNG 列表
     """
+    print("Check the pure black picture at the end...")
     while len(png_list) > 0 and is_image_black(Image.open(png_list[-1])):
-        print("----")
         png_list.pop()
+        print(f"Delete : {png_list[-1]}")
+    print("Detection completed.")
 
 
 def convert_png_list_to_gif(png_list: list, output_file: str, duration=40):
@@ -106,14 +118,16 @@ def convert_png_list_to_gif(png_list: list, output_file: str, duration=40):
     )
 
 
-def save_png_list_to_one_png(png_list: list, output_file: str):
+def merge_png_list(png_list: list, output_file: str):
     """将 png 列表转换为一个 png 文件, 保存到 output_file 文件夹中，并将关键信息保存到 json 文件中。
 
-        例如：save_png_list_to_one_png(png_list, "img/out.png") 会生成如下结构：
+        merge_png_list(png_list, "img/out.png") 会生成如下结构：
 
-        - img/out
-            |- out.png
-            |- out_info.json
+        .. code-block:: text
+
+            - img/out
+                - out.png
+                - out_info.json
 
     :param list png_list: png列表
     :param str output_file: 输出的文件名称
@@ -149,6 +163,7 @@ def save_png_list_to_one_png(png_list: list, output_file: str):
 
     # 保存新图像
     new_im.save(output_file, "PNG")
+    print(f"Save to {output_file}.")
     # 保存关键信息到 output_file.json
     info = {
         "Total_width": total_width,
@@ -157,11 +172,25 @@ def save_png_list_to_one_png(png_list: list, output_file: str):
     }
     with open(output_info_file, "w") as f:
         json.dump(info, f)
+    print(f"Save info to {output_file}.")
+
+
+def get_merge_png_info(json_file: str) -> dict:
+    """从 json 获取单张图片的信息
+
+    :param str json_file: json 文件路径
+    :return dict: 图片信息
+    """
+    with open(json_file, "r") as f:
+        info = json.load(f)
+    return info
 
 
 if __name__ == "__main__":
-    dir_path = "imgs/Elements - Explosion 004 Radial noCT noRSZ"
-    save_png_list_to_one_png(
-        get_file_name_from_dir_by_ext(dir_path, "png"),
-        r"D:\Git\Sgame\pyglet\Explosion_004.png",
-    )
+    # dir_path = "imgs/Elements - Explosion 004 Radial noCT noRSZ"
+    # save_png_list_to_one_png(
+    #     get_file_name_from_dir_by_ext(dir_path, "png"),
+    #     r"D:\Git\Sgame\pyglet\Explosion_004.png",
+    # )
+    # print(get_one_png_info(r"D:\Git\Sgame\pyglet\Explosion_004_info.json"))
+    create_solid_color_picture("test.png", 100, 100, (0, 255, 0, 255))
