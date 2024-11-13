@@ -2,12 +2,17 @@ import os, shutil
 from pathlib import Path
 
 
-def get_file_list(dir_path: str, join_path: bool = False) -> list[str]:
+def get_file_list(dir_path: str, join_path: bool = False) -> list:
     """获取文件列表
 
     :param str dir_path: 目录路径
     :param bool join_path: 返回列表是否添加目录路径
-    :return List[str]: 文件列表
+    :return list: 文件列表
+
+    >>> dir_path = os.path.dirname(__file__)
+    >>> f_list = get_file_list(os.path.join(dir_path, "test"), join_path=True)
+    >>> len(f_list)
+    5
     """
     if not os.path.exists(dir_path):
         raise FileNotFoundError(f"dir not found: {dir_path}")
@@ -24,32 +29,39 @@ def get_file_list(dir_path: str, join_path: bool = False) -> list[str]:
         ]
 
 
-def get_dir_list(dir_path: str, join_path: bool = False) -> list[str]:
+def get_dir_list(dir_path: str, join_path: bool = False) -> list:
     """获取目录列表
 
     :param str dir_path: 目录路径
     :param bool join_path: 返回列表是否添加目录路径
-    :return List[str]: 目录列表
+    :return list: 目录列表
+
+    >>> dir_path = os.path.dirname(__file__)
+    >>> d_list = get_dir_list(os.path.join(dir_path, "test"), join_path=True)
+    >>> len(d_list)
+    5
     """
     if not os.path.exists(dir_path):
         raise FileNotFoundError(f"dir not found: {dir_path}")
 
     if join_path:
         return [
-            os.path.join(dir_path, d)
+            str(Path(os.path.join(dir_path, d)))
             for d in os.listdir(dir_path)
             if os.path.isdir(os.path.join(dir_path, d))
         ]
     else:
         return [
-            d for d in os.listdir(dir_path) if os.path.isdir(os.path.join(dir_path, d))
+            str(Path(d))
+            for d in os.listdir(dir_path)
+            if os.path.isdir(os.path.join(dir_path, d))
         ]
 
 
-def add_parent_name_to_file_list(file_list: list[str], mod: str = "prefix"):
+def add_parent_name_to_file_list(file_list: list, mod: str = "prefix"):
     """重命名文件列表，给文件列表添加父目录名
 
-    :param list[str] file_list: 文件列表
+    :param list file_list: 文件列表
     :param str mod: 添加方式, "prefix" 或 "suffix", defaults to "prefix"
     :raises ValueError: ValueError
     """
@@ -77,42 +89,38 @@ def get_file_list_with_str(
     start_str: str = "",
     end_str: str = "",
     with_ext: bool = False,
-    ext: str = None,
-) -> list[str]:
+) -> list:
     """获取目录中以指定字符串结尾的文件列表
 
     :param str dir_path: 目录路径
     :param str start_str: 起始字符串, defaults to ""
     :param str end_str: 结尾字符串, defaults to ""
     :param bool with_ext: 结尾字符串是否包含扩展名, defaults to False
-    :param str ext: 扩展名, defaults to "txt"
     :return list: 以指定字符串结尾的文件列表
     """
     file_list = get_file_list(dir_path)
     if start_str != "":  # 筛选起始字符串为 start_str 的文件
-        file_list = [f for f in file_list if f.startswith(start_str)]
+        file_list = [str(Path(f)) for f in file_list if f.startswith(start_str)]
 
-    if ext is not None:  # 筛选扩展名为 ext 的文件
-        if not ext[0] == ".":
-            ext = "." + ext
-        file_list = [f for f in file_list if f.endswith(ext)]
     if not with_ext:  # 筛选不带扩展名的文件,以 end_str 结尾的文件
         file_list = [
-            os.path.join(dir_path, f)
+            str(Path(os.path.join(dir_path, f)))
             for f in file_list
             if f[: f.rfind(".")].endswith(end_str)
         ]
     else:  # 筛选带扩展名为 ext ,以 end_str 结尾的文件
         if end_str != "":
             file_list = [
-                os.path.join(dir_path, f) for f in file_list if f.endswith(end_str)
+                str(Path(os.path.join(dir_path, f)))
+                for f in file_list
+                if f.endswith(end_str)
             ]
     return file_list
 
 
 def get_dir_list_with_str(
     dir_path: str, start_str: str = "", end_str: str = ""
-) -> list[str]:
+) -> list:
     """获取目录中以指定字符串结尾的目录列表
 
     :param str dir_path: 目录路径
@@ -123,7 +131,21 @@ def get_dir_list_with_str(
     dir_list = get_dir_list(dir_path)
     if end_str != "":  # 筛选起始字符串为 start_str 的文件
         dir_list = [d for d in dir_list if d.startswith(start_str)]
-    return [os.path.join(dir_path, d) for d in dir_list if d.endswith(end_str)]
+    return [
+        str(Path(os.path.join(dir_path, d))) for d in dir_list if d.endswith(end_str)
+    ]
+
+
+def get_file_list_with_ext(dir_path: str, ext: str, join_path: bool = False) -> list:
+    """获取目录中以指定扩展名结尾的文件列表
+
+    :param str dir_path: 目录路径
+    :param str ext: 扩展名
+    :param bool join_path: 返回列表是否添加目录路径
+    :return list: 以指定扩展名结尾的文件列表
+    """
+    file_list = get_file_list(dir_path, join_path=join_path)
+    return [str(Path(f)) for f in file_list if f.split(".")[-1] == ext]
 
 
 def move_file_list_to_dir(dir_path: str, file_list: list):
@@ -190,22 +212,16 @@ def batch_touch(
 
 
 if __name__ == "__main__":
-    # xx = get_file_list_with_end_str("stools/assets/test", "for_test")
-    # move_file_list_to_dir("test", xx)
-    # batch_touch("stools/assets/test")
+    import doctest
 
-    # dirs = get_dir_list("stools/assets/test")
-    # print(dirs)
-    # batch_touch("stools/assets/test", suffix="dfsfa")
-    # xx = get_file_list_with_end_str("stools/assets/test", "dfsfa")
-    # copy_file_list_to_dir("./test", xx)
-    # print(get_file_list("stools/assets/test"))
-    # print(get_dir_list("stools/assets/test"))
-    # print(get_file_list_with_end_str("stools/assets/test", "dfsfa"))
-    # print(get_dir_list_with_str("stools/assets/test", start_str="w", end_str=")"))
-    add_parent_name(get_file_list("stools/assets/test", join_path=True))
-    # if "xxcc".startswith("xx"):
-    #     print("yes")
-    # else:
-    #     print("no")
-    pass
+    doctest.testmod()
+
+    # dir_path = os.path.dirname(__file__)
+    # print(dir_path)
+    # f_list = get_file_list(os.path.join(dir_path, "test"), join_path=True)
+    # print(len(f_list))
+    # f_li = get_file_list_with_ext("./assets/test", "png", join_path=True)
+    # for f in f_li:
+    #     print(type(f))
+    # # print(get_file_list_with_str("./assets/test", end_str=".txt", with_ext=False))
+    # pass

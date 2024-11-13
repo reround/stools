@@ -1,5 +1,6 @@
 import json, os, cv2
-from .Sfile import get_file_list_with_str
+
+# from .Sfile import get_file_list_with_str
 from PIL import Image
 
 
@@ -24,9 +25,10 @@ def get_png_list(dir_path: str) -> list:
 
     :param str dir_path: 目录路径
     :return list: 目录中所有扩展名为 png 的文件名
+    :弃用: 使用 Sfile.get_file_list_with_ext(dir_path, "png")
     """
     print(f"get_png_list: {dir_path}")
-    return get_file_list_with_str(dir_path, end_str="png", with_ext=True, ext="png")
+    return get_file_list_with_ext(dir_path, "png")
 
 
 def is_image_solid_black(img: Image):
@@ -173,11 +175,18 @@ def get_merge_png_info(json_file: str) -> dict:
     return info
 
 
+# 将图片转换成像素风图片
+def convert_to_pixel_art(img_path: str, out_path: str, width: int, height: int):
+    img = Image.open(img_path)
+    img = img.resize((width, height), Image.NEAREST)
+    img.save(out_path)
+    print(f"convert {img_path} to {out_path}")
+
+
 if __name__ == "__main__":
-    # dir_path = "imgs/Elements - Explosion 004 Radial noCT noRSZ"
-    # save_png_list_to_one_png(
-    #     get_file_name_from_dir_by_ext(dir_path, "png"),
-    #     r"D:\Git\Sgame\pyglet\Explosion_004.png",
+    # convert_to_pixel_art(
+    #     "./assets/imgs/test.png", "./assets/imgs/test_pixel.png", 100, 100
     # )
-    # print(get_one_png_info(r"D:\Git\Sgame\pyglet\Explosion_004_info.json"))
-    create_solid_color_picture("test.png", 100, 100, (0, 255, 0, 255))
+    convert_to_pixel_art(
+        "./assets/imgs/xx.webp", "./assets/imgs/xx_pixel.webp", 100, 100
+    )

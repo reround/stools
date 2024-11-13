@@ -27,43 +27,6 @@ class Sound:
         self.format = format_  # 格式
         self.channal = channal  # 声道数
 
-    def open_stream(self, write=False):
-        """打开流
-
-        :param bool write: 是否能够写入, defaults to False
-        """
-        self.stream = self.p.open(
-            format=self.format,
-            channels=self.channal,
-            rate=self.rate,
-            output=True,
-            input=write,
-        )
-
-    def close_stream(self):
-        """关闭流"""
-        self.stream.stop_stream()
-        self.stream.close()
-
-    def play_ndarray(self, array: np.ndarray, rate: int = 44100, level: float = 1.0):
-        """播放 np.ndarray 形式的音频,目前是整体处理，文件肯定不能特别大
-
-        :param np.ndarray array: np.ndarray 序列
-        :param int rate: 采样速率, defaults to 44100
-        :param float level: 声音等级(0-30), 0 为不做变化, defaults to 1.0
-        """
-        assert level >= 0 and level <= 30, "声音等级必须在 0-30 之间"
-        if level > 0:
-            # 归一化
-            array = array / np.max(array)
-            array = array * 1e3 * level
-        self.rate = rate
-        array_bytes = array.astype(np.int16).tobytes()
-        self.open_stream()
-        self.stream.write(array_bytes)
-        self.close_stream()
-        # self.p.terminate()
-
     @staticmethod
     def to_wav_from_ndarray(
         array: np.ndarray,
@@ -97,30 +60,6 @@ class Sound:
         wf.setsampwidth(pyaudio.PyAudio().get_sample_size(format_))
         wf.setframerate(rate)
         wf.writeframes(array_bytes)
-        wf.close()
-
-    def record(self, filename: str, record_seconds: int):
-        """记录声音
-
-        :param str filename: 保存的文件名
-        :param int record_seconds: 录音时间
-        """
-        frames = []
-        self.open_stream(input_=True)
-
-        print("Record start ...")
-        for i in range(0, int(self.rate / self.chunk * record_seconds)):
-            data = self.stream.read(self.chunk)
-            frames.append(data)
-        print("Record end.")
-        self.close_stream()
-        self.p.terminate()
-
-        wf = wave.open(filename, "wb")
-        wf.setnchannels(self.channal)
-        wf.setsampwidth(self.p.get_sample_size(self.format))
-        wf.setframerate(self.rate)
-        wf.writeframes(b"".join(frames))
         wf.close()
 
     @staticmethod
@@ -164,8 +103,67 @@ class Sound:
 
             return audio_data, frame_rate
 
+    def open_stream(self, write=False):
+        """打开流
 
-import matplotlib.pyplot as plt
+        :param bool write: 是否能够写入, defaults to False
+        """
+        self.stream = self.p.open(
+            format=self.format,
+            channels=self.channal,
+            rate=self.rate,
+            output=True,
+            input=write,
+        )
+
+    def close_stream(self):
+        """关闭流"""
+        self.stream.stop_stream()
+        self.stream.close()
+
+    def play_ndarray(self, array: np.ndarray, rate: int = 44100, level: float = 1.0):
+        """播放 np.ndarray 形式的音频,目前是整体处理，文件肯定不能特别大
+
+        :param np.ndarray array: np.ndarray 序列
+        :param int rate: 采样速率, defaults to 44100
+        :param float level: 声音等级(0-30), 0 为不做变化, defaults to 1.0
+        """
+        assert level >= 0 and level <= 30, "声音等级必须在 0-30 之间"
+        if level > 0:
+            # 归一化
+            array = array / np.max(array)
+            array = array * 1e3 * level
+        self.rate = rate
+        array_bytes = array.astype(np.int16).tobytes()
+        self.open_stream()
+        self.stream.write(array_bytes)
+        self.close_stream()
+        # self.p.terminate()
+
+    def record(self, filename: str, record_seconds: int):
+        """记录声音
+
+        :param str filename: 保存的文件名
+        :param int record_seconds: 录音时间
+        """
+        frames = []
+        self.open_stream(input_=True)
+
+        print("Record start ...")
+        for i in range(0, int(self.rate / self.chunk * record_seconds)):
+            data = self.stream.read(self.chunk)
+            frames.append(data)
+        print("Record end.")
+        self.close_stream()
+        self.p.terminate()
+
+        wf = wave.open(filename, "wb")
+        wf.setnchannels(self.channal)
+        wf.setsampwidth(self.p.get_sample_size(self.format))
+        wf.setframerate(self.rate)
+        wf.writeframes(b"".join(frames))
+        wf.close()
+
 
 if __name__ == "__main__":
     pass

@@ -120,6 +120,9 @@ def sawtooth(
     return (t, s)
 
 
+from deprecated import deprecated
+
+
 def chirp(
     start_freq: float = 10,
     end_freq: float = 100,
