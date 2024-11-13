@@ -46,13 +46,39 @@ def get_dir_list(dir_path: str, join_path: bool = False) -> list[str]:
         ]
 
 
+def add_parent_name_to_file_list(file_list: list[str], mod: str = "prefix"):
+    """重命名文件列表，给文件列表添加父目录名
+
+    :param list[str] file_list: 文件列表
+    :param str mod: 添加方式, "prefix" 或 "suffix", defaults to "prefix"
+    :raises ValueError: ValueError
+    """
+    for f in file_list:
+        parent_dir = os.path.dirname(f)
+        f_basename = os.path.basename(f)
+        parent_name = os.path.basename(os.path.dirname(f))
+        if mod == "prefix":
+            new_name = os.path.join(parent_dir, parent_name + "_" + f_basename)
+        elif mod == "suffix":
+            new_name = os.path.join(parent_dir, f_basename + "_" + parent_name)
+        else:
+            raise ValueError(f"mod must be 'prefix' or 'suffix', but got {mod}")
+
+        # 重命名文件
+        try:
+            os.rename(f, new_name)
+            print(f"file: {f} renamed to: {new_name}")
+        except OSError as e:
+            print(e)
+
+
 def get_file_list_with_str(
     dir_path: str,
     start_str: str = "",
     end_str: str = "",
     with_ext: bool = False,
     ext: str = None,
-) -> list:
+) -> list[str]:
     """获取目录中以指定字符串结尾的文件列表
 
     :param str dir_path: 目录路径
@@ -86,7 +112,7 @@ def get_file_list_with_str(
 
 def get_dir_list_with_str(
     dir_path: str, start_str: str = "", end_str: str = ""
-) -> list:
+) -> list[str]:
     """获取目录中以指定字符串结尾的目录列表
 
     :param str dir_path: 目录路径
@@ -112,8 +138,11 @@ def move_file_list_to_dir(dir_path: str, file_list: list):
         print(f"create dir: {dir_path}")
     # 移动文件
     for f in file_list:
-        shutil.move(f, dir_path)
-        print(f"move file: {f} to dir: {dir_path}")
+        try:
+            shutil.move(f, dir_path)
+            print(f"move file: {f} to dir: {dir_path}")
+        except Exception as e:
+            print(e)
 
 
 def copy_file_list_to_dir(dir_path: str, file_list: list):
@@ -163,6 +192,7 @@ def batch_touch(
 if __name__ == "__main__":
     # xx = get_file_list_with_end_str("stools/assets/test", "for_test")
     # move_file_list_to_dir("test", xx)
+    # batch_touch("stools/assets/test")
 
     # dirs = get_dir_list("stools/assets/test")
     # print(dirs)
@@ -173,10 +203,7 @@ if __name__ == "__main__":
     # print(get_dir_list("stools/assets/test"))
     # print(get_file_list_with_end_str("stools/assets/test", "dfsfa"))
     # print(get_dir_list_with_str("stools/assets/test", start_str="w", end_str=")"))
-    dl = get_dir_list("stools/assets")
-    print(dl)
-    for d in dl:
-        print(get_file_list("stools/assets/test"))
+    add_parent_name(get_file_list("stools/assets/test", join_path=True))
     # if "xxcc".startswith("xx"):
     #     print("yes")
     # else:

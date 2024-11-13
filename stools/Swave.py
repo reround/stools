@@ -165,10 +165,8 @@ def noise(
     return (t, s)
 
 
-import matplotlib.pyplot as plt
-
 if __name__ == "__main__":
-    pass
+    import matplotlib.pyplot as plt
 
     t = np.arange(0, 2, 0.01)
     t, s = sine(freq=10, amp=1)

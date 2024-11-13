@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import hilbert, find_peaks
 from scipy.signal import stft
+from scipy import fftpack
 
 
 def smooth(x: np.ndarray, M: int) -> np.ndarray:
@@ -115,7 +116,7 @@ def compare_sig_peaks(
     plt.show()
 
 
-def pectrum(signal: np.ndarray, sample_interval: int, isdB: bool = False):
+def spectrum(signal: np.ndarray, sample_interval: int, isdB: bool = False):
     """绘制 signal 的傅里叶变换频谱图
 
     :param np.ndarray signal: 信号序列
@@ -131,6 +132,7 @@ def pectrum(signal: np.ndarray, sample_interval: int, isdB: bool = False):
         s_fft = fftpack.fft(signal)
         f = fftpack.fftfreq(length, sample_interval)
     mask = f > 0
+    plt.figure(figsize=figsize)
     plt.plot(f[mask], abs(s_fft[mask]))
     plt.title("Frequency Spectrum")
     plt.xlabel("Frequency (Hz)")

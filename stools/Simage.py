@@ -1,10 +1,10 @@
-import json, os
-import cv2
+import json, os, cv2
+from .Sfile import get_file_list_with_str
 from PIL import Image
 
 
 def create_solid_color_picture(output_file, width=None, height=None, color=None):
-    """生成纯色图片
+    """生成纯色图片，保存到 output_file 文件中
 
     :param _type_ output_file: 输出路径
     :param _type_ width: 宽, defaults to None
@@ -19,27 +19,14 @@ def create_solid_color_picture(output_file, width=None, height=None, color=None)
     print(f"Create {output_file}.")
 
 
-def get_png_list(dir_path: str, ext: str = None) -> list:
-    """获取目录中所有扩展名为 ext 的文件名
+def get_png_list(dir_path: str) -> list:
+    """获取目录中所有扩展名为 png 的文件名
 
     :param str dir_path: 目录路径
-    :param str ext: 扩展名
-    :return list: _description_
+    :return list: 目录中所有扩展名为 png 的文件名
     """
-    # 检查文件夹是否存在
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-        print(f"create dir: {dir_path}")
-    # # 转换成绝对路径
-    # dir_path = os.path.join(os.getcwd(), dir_path)
-    # 获取文件夹中的所有文件名
-    file_names = os.listdir(dir_path)
-    # 排序
-    file_names.sort()
-    if ext is not None:
-        # 筛选扩展名为 ext 的文件
-        file_names = [os.path.join(dir_path, f) for f in file_names if f.endswith(ext)]
-    return file_names
+    print(f"get_png_list: {dir_path}")
+    return get_file_list_with_str(dir_path, end_str="png", with_ext=True, ext="png")
 
 
 def is_image_solid_black(img: Image):
