@@ -19,13 +19,13 @@ def get_file_list(dir_path: str, join_path: bool = False) -> list:
 
     if join_path:
         return [
-            os.path.join(dir_path, d)
+            str(Path(os.path.join(dir_path, d)))
             for d in os.listdir(dir_path)
             if os.path.isfile(os.path.join(dir_path, d))
         ]
     else:
         return [
-            d for d in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, d))
+            str(Path(d)) for d in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, d))
         ]
 
 
